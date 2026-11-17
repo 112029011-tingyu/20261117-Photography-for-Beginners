@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光影的魔術師：攝影初學者入門手帳</title>
+  <style>
+    :root {
+      --bg-page: #f4efe6;
+      --bg-notebook: #fbf9f4;
+      --bg-card: #ffffff;
+      --border-soft: rgba(180, 160, 140, 0.28);
+      --border-dash: #d8cebe;
+      --text-main: #2d2723;
+      --text-muted: #6e6761;
+      --text-light: #8c837b;
+      --color-terracotta: #b85736;
+      --color-sage: #536b56;
+      --color-indigo: #3b556b;
+      --color-ochre: #be8235;
+      --color-tape: rgba(220, 205, 180, 0.7);
+      --font-serif: "Songti TC", "Noto Serif TC", "Source Han Serif TC", "STSong", "Baskerville", "Georgia", serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-hand: "Courier New", Courier, "Kaiti TC", monospace, serif;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      background-image: 
+        radial-gradient(rgba(190, 175, 155, 0.18) 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .progress-bar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(180, 160, 140, 0.2);
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-ochre), var(--color-terracotta));
+      transition: width 0.35s ease;
+    }
+
+    /* Viewport */
+    .viewport {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* Travel Notebook Slide Frame */
+    .slide {
+      position: absolute;
+      width: min(1280px, 94vw);
+      height: min(740px, 88vh);
+      background: var(--bg-notebook);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      box-shadow: 
+        0 24px 48px -12px rgba(60, 45, 30, 0.12),
+        0 4px 16px rgba(60, 45, 30, 0.04),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+      padding: 40px 52px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.97) translateY(12px);
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* Washi Tape Accent */
+    .washi-tape-top {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 24px;
+      background: var(--color-tape);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      opacity: 0.85;
+      border-left: 2px dashed rgba(160, 140, 110, 0.5);
+      border-right: 2px dashed rgba(160, 140, 110, 0.5);
+      pointer-events: none;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--border-dash);
+    }
+
+    .slide-tag {
+      font-family: var(--font-hand);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-terracotta);
+      background: rgba(184, 87, 54, 0.08);
+      padding: 3px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 6px;
+      border: 1px solid rgba(184, 87, 54, 0.2);
+    }
+
+    .slide-title {
+      font-family: var(--font-serif);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    .slide-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .slide-date-stamp {
+      font-family: var(--font-hand);
+      font-size: 0.78rem;
+      color: var(--text-light);
+      border: 1px dashed var(--border-dash);
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-align: right;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      flex: 1;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      flex: 1;
+    }
+
+    /* Journal Notebook Card */
+    .journal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      box-shadow: 0 4px 12px rgba(60, 45, 30, 0.03);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    .card-accent-terra { border-top: 3px solid var(--color-terracotta); }
+    .card-accent-sage { border-top: 3px solid var(--color-sage); }
+    .card-accent-indigo { border-top: 3px solid var(--color-indigo); }
+    .card-accent-ochre { border-top: 3px solid var(--color-ochre); }
+
+    .journal-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .journal-card-body {
+      font-size: 0.92rem;
+      line-height: 1.68;
+      color: #4a433d;
+      flex: 1;
+    }
+
+    .journal-card-body ul, .journal-card-body ol {
+      padding-left: 20px;
+    }
+
+    .journal-card-body li {
+      margin-bottom: 8px;
+    }
+
+    .journal-card-body strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    /* Polaroid Photo Card Component */
+    .polaroid-box {
+      background: #ffffff;
+      padding: 14px 14px 22px 14px;
+      border-radius: 4px;
+      box-shadow: 
+        0 12px 28px rgba(60, 45, 30, 0.12),
+        0 2px 6px rgba(60, 45, 30, 0.06);
+      border: 1px solid rgba(200, 190, 175, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .polaroid-box:hover {
+      transform: scale(1.02) rotate(0deg) !important;
+      box-shadow: 0 18px 36px rgba(60, 45, 30, 0.16);
+      z-index: 20;
+    }
+
+    .polaroid-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 2px;
+      display: block;
+      filter: contrast(1.02) saturate(1.02);
+    }
+
+    .polaroid-caption {
+      margin-top: 14px;
+      font-family: var(--font-hand);
+      font-size: 0.85rem;
+      color: #554e48;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .polaroid-params {
+      font-size: 0.75rem;
+      color: var(--color-terracotta);
+      font-family: var(--font-hand);
+      margin-top: 4px;
+      background: rgba(184, 87, 54, 0.08);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    /* Corner Tape for Polaroid */
+    .tape-corner {
+      position: absolute;
+      width: 70px;
+      height: 20px;
+      background: var(--color-tape);
+      opacity: 0.75;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      pointer-events: none;
+    }
+    .tape-tl { top: -8px; left: -14px; transform: rotate(-35deg); }
+    .tape-tr { top: -8px; right: -14px; transform: rotate(35deg); }
+
+    /* 35mm Film Strip Frame */
+    .film-strip-box {
+      background: #1e1b18;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #332d27;
+      position: relative;
+    }
+
+    .film-strip-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 2px;
+      display: block;
+    }
+
+    .film-strip-label {
+      color: #d8cebe;
+      font-family: var(--font-hand);
+      font-size: 0.78rem;
+      margin-top: 10px;
+      letter-spacing: 0.06em;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 6px;
+    }
+
+    /* Vintage Stamp Seal */
+    .stamp-seal {
+      position: absolute;
+      bottom: 24px;
+      right: 28px;
+      width: 90px;
+      height: 90px;
+      border: 2px dashed rgba(184, 87, 54, 0.4);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-terracotta);
+      font-family: var(--font-hand);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transform: rotate(-12deg);
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    /* Vintage Table */
+    .table-notebook {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 10px;
+    }
+
+    .table-notebook th, .table-notebook td {
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .table-notebook th {
+      background: rgba(180, 160, 140, 0.08);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .table-notebook tr:nth-child(even) {
+      background: rgba(250, 246, 240, 0.5);
+    }
+
+    /* Controls Bar */
+    .controls {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(251, 249, 244, 0.95);
+      border: 1px solid var(--border-soft);
+      padding: 6px 18px;
+      border-radius: 30px;
+      box-shadow: 0 10px 24px rgba(60, 45, 30, 0.1);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.92rem;
+      padding: 6px 10px;
+      border-radius: 20px;
+      transition: all 0.2s;
+      font-family: var(--font-sans);
+    }
+
+    .btn:hover {
+      color: var(--color-terracotta);
+      background: rgba(184, 87, 54, 0.08);
+    }
+
+    .counter {
+      font-family: var(--font-hand);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      min-width: 80px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    /* Navigation Drawer */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -380px;
+      width: 380px;
+      height: 100vh;
+      background: var(--bg-notebook);
+      border-left: 1px solid var(--border-soft);
+      z-index: 200;
+      box-shadow: -15px 0 35px rgba(60, 45, 30, 0.15);
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 24px;
+    }
+
+    .drawer.open { right: 0; }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border-dash);
+    }
+
+    .drawer-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .drawer-list {
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 6px;
+    }
+
+    .drawer-item {
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .drawer-item:hover {
+      background: rgba(180, 160, 140, 0.12);
+      color: var(--text-main);
+    }
+
+    .drawer-item.active {
+      background: rgba(184, 87, 54, 0.1);
+      color: var(--color-terracotta);
+      font-weight: 700;
+    }
+
+    .drawer-num {
+      font-family: var(--font-hand);
+      font-size: 0.78rem;
+      opacity: 0.7;
+    }
+
+    .shortcuts-hint {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      font-size: 0.75rem;
+      color: var(--text-light);
+      display: flex;
+      gap: 10px;
+      z-index: 90;
+      font-family: var(--font-hand);
+    }
+
+    .kbd {
+      background: rgba(180, 160, 140, 0.18);
+      border: 1px solid var(--border-dash);
+      border-radius: 3px;
+      padding: 1px 5px;
+      color: var(--text-main);
+    }
+
+    @media print {
+      body { background: #fff !important; }
+      .controls, .progress-bar-container, .drawer, .shortcuts-hint { display: none !important; }
+      .viewport { display: block; padding: 0; height: auto; }
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        page-break-after: always;
+        width: 100% !important;
+        height: 100vh !important;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="viewport">
+
+    <!-- Slide 1: Cover -->
+    <div class="slide active" id="slide-1">
+      <div class="washi-tape-top"></div>
+      <div class="grid-2">
+        <div style="padding-right: 16px;">
+          <span class="slide-tag">TRAVELER'S FIELD NOTE · NO. 01</span>
+          <h1 style="font-family: var(--font-serif); font-size: 3.2rem; font-weight: 800; line-height: 1.2; margin: 12px 0 18px; color: var(--text-main); letter-spacing: -0.02em;">
+            光影的魔術師：<br>
+            <span style="color: var(--color-terracotta);">攝影初學者入門手帳</span>
+          </h1>
+          <p style="font-size: 1.15rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; font-style: italic;">
+            「我們按下快門，不是為了凍結時間，而是為了把那一刻吹拂過臉頰的風與光，溫柔地存進記憶。」
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <div style="background: rgba(184,87,54,0.08); border: 1px solid rgba(184,87,54,0.2); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--color-terracotta);">
+              📖 曝光三要素與雨桶比喻
+            </div>
+            <div style="background: rgba(83,107,86,0.08); border: 1px solid rgba(83,107,86,0.2); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--color-sage);">
+              🎞️ 35mm 片幅與空間透視
+            </div>
+            <div style="background: rgba(59,85,107,0.08); border: 1px solid rgba(59,85,107,0.2); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--color-indigo);">
+              🎨 數位暗房十步工作流
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; position: relative;">
+          <div class="polaroid-box" style="transform: rotate(2deg); width: 340px;">
+            <div class="tape-corner tape-tr"></div>
+            <img src="assets/camera-paris-photos.jpg" alt="Vintage Camera & Paris Photos" class="polaroid-img" style="height: 320px;">
+            <div class="polaroid-caption">「旅行者手帳的起點」</div>
+            <div class="polaroid-params">VINTAGE 35MM · 40MM · F/2.8</div>
+          </div>
+          <div class="stamp-seal">
+            PHOTO<br>JOURNAL<br>2026
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Mindset -->
+    <div class="slide" id="slide-2">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 01 · 攝影心態</span>
+          <h2 class="slide-title">日常的非日常：看見光影的「減法藝術」</h2>
+          <p class="slide-subtitle">好照片的靈魂不在昂貴的器材，而在相機後面那顆懂得停下來凝視的心</p>
+        </div>
+        <div class="slide-date-stamp">FIELD MEMO<br>PAGE 02</div>
+      </div>
+      <div class="grid-2">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="journal-card card-accent-terra">
+            <div class="journal-card-title">🎨 繪畫是加法，攝影是減法</div>
+            <div class="journal-card-body">
+              <ul>
+                <li><strong>畫家在空白畫布上添增元素</strong>：每一筆都是刻意放上去的。</li>
+                <li><strong>攝影師在繁複現實中做剔除</strong>：按快門前先環顧觀景窗四周，把無關的路人、垃圾桶與雜亂電線統統剔除出畫框之外。</li>
+                <li><strong>主題越單純，情感越深沉</strong>。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="journal-card card-accent-sage">
+            <div class="journal-card-title">👀 換個高度看世界（攝影眼）</div>
+            <div class="journal-card-body">
+              <ul>
+                <li>告別成人的平視角度：嘗試蹲到與貓咪平行的視線，或是貼近地面仰拍。</li>
+                <li>先觀察光線從哪裡打來，再決定拍攝位置（陰影的柔和往往比直射光更動人）。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div class="polaroid-box" style="transform: rotate(-1.5deg); width: 360px;">
+            <div class="tape-corner tape-tl"></div>
+            <img src="assets/cats-seawall.jpg" alt="Four cats on seawall" class="polaroid-img" style="height: 290px;">
+            <div class="polaroid-caption">「尾道海邊午後 · 與四隻貓的平行視線」</div>
+            <div class="polaroid-params">85mm · f/2.8 · 1/500s · ISO 200</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Sensor & 35mm Film -->
+    <div class="slide" id="slide-3">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 02 · 器材光學</span>
+          <h2 class="slide-title">相機的心臟：感光元件與 35mm 片幅</h2>
+          <p class="slide-subtitle">全片幅 (Full-frame) vs APS-C 裁切係數，如何決定視角與畫質？</p>
+        </div>
+        <div class="slide-date-stamp">GEAR LAB<br>PAGE 03</div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="journal-card card-accent-indigo" style="margin-bottom: 16px;">
+            <div class="journal-card-title">📐 裁切係數 (Crop Factor) 與等效焦距</div>
+            <div class="journal-card-body">
+              <p>以傳統 35mm 菲林底片（36×24 mm）為 <strong>1.0x 全片幅基準</strong>：</p>
+              <ul style="margin-top: 6px;">
+                <li><strong>APS-C 裁切片幅</strong>：感光元件面積較小，只錄取鏡頭中央區域，視野變窄（裁切係數為 <strong>1.5x</strong>，Canon 為 <strong>1.6x</strong>）。</li>
+                <li><strong>等效焦距公式</strong>：<code>等效視野 = 實體鏡頭焦距 × 裁切係數</code></li>
+                <li><strong>實測範例</strong>：50mm 鏡頭接在 Sony APS-C 機身：<code>50 × 1.5 = 75mm</code>（標準鏡瞬間變成人像中望遠鏡！）。</li>
+              </ul>
+            </div>
+          </div>
+          <table class="table-notebook">
+            <thead>
+              <tr>
+                <th>片幅</th>
+                <th>等效倍率</th>
+                <th>夜間高感雜訊</th>
+                <th>散景虛化感</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>全片幅 (FF)</strong></td>
+                <td>1.0x (標準)</td>
+                <td><span style="color:var(--color-sage);">極純淨 (受光多)</span></td>
+                <td><span style="color:var(--color-sage);">更淺更迷人</span></td>
+              </tr>
+              <tr>
+                <td><strong>APS-C</strong></td>
+                <td>1.5x ~ 1.6x</td>
+                <td>良好、實用</td>
+                <td>景深適中</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div class="film-strip-box" style="transform: rotate(1deg); width: 360px;">
+            <img src="assets/film-negative-35mm.jpg" alt="35mm Film Negative" class="film-strip-img" style="height: 290px;">
+            <div class="film-strip-label">
+              <span>● KODAK 400</span>
+              <span>36 × 24 MM FULL FRAME</span>
+              <span>EXP 17A ●</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Exposure Triangle -->
+    <div class="slide" id="slide-4">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 03 · 曝光物理</span>
+          <h2 class="slide-title">曝光黃金三角：雨桶比喻與視覺權衡</h2>
+          <p class="slide-subtitle">曝光就是拿水桶在雨中接水；三者協同合作，缺一不可</p>
+        </div>
+        <div class="slide-date-stamp">THEORY<br>PAGE 04</div>
+      </div>
+      <div class="grid-3">
+        <div class="journal-card card-accent-ochre">
+          <div class="journal-card-title">🪣 雨桶物理比喻 (Rain Bucket)</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>現場光線</strong> = 降雨強度（自然環境決定，無法控制）。</li>
+              <li><strong>光圈 (Aperture)</strong> = <strong>水桶口徑寬度</strong>。<br>開口越寬，進水速度越快。</li>
+              <li><strong>快門 (Shutter)</strong> = <strong>接水時間長短</strong>。<br>時間越長，積攢水量越多。</li>
+              <li><strong>感光度 (ISO)</strong> = <strong>及格水量標準</strong>。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">⚖️ 曝光互易法則 (Reciprocity)</div>
+          <div class="journal-card-body">
+            <p><strong>只要總進光量一致，畫面明暗就完全相等：</strong></p>
+            <ul>
+              <li>開大 1 級光圈 (+1 Stop)，快門速度就可以加快一倍 (-1 Stop)。</li>
+              <li>曝光三要素可以隨意搭配組合，但每一項都會帶來完全不同的<strong>「視覺副效應」</strong>！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">🎯 三大要素副效應矩陣</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>光圈大小</strong> ──► <strong>景深 (Depth of Field)</strong><br><small style="color:var(--text-muted);">大光圈背景模糊，小光圈全景銳利</small></li>
+              <li><strong>快門速度</strong> ──► <strong>動態表現 (Motion Blur)</strong><br><small style="color:var(--text-muted);">快快門凍結動態，慢快門流動拉絲</small></li>
+              <li><strong>感光度 ISO</strong> ──► <strong>影像雜訊 (Noise)</strong><br><small style="color:var(--text-muted);">低 ISO 純淨細膩，高 ISO 粗糙起噪</small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Aperture & DoF -->
+    <div class="slide" id="slide-5">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 04 · 光圈控制</span>
+          <h2 class="slide-title">光圈 (Aperture)：掌控進光量與迷人散景</h2>
+          <p class="slide-subtitle">f 值倒數原理、全檔光圈級距與畫質甜區 (Sweet Spot)</p>
+        </div>
+        <div class="slide-date-stamp">OPTICS<br>PAGE 05</div>
+      </div>
+      <div class="grid-2">
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">🔍 f-number 數值背後的倒數真相</div>
+          <div class="journal-card-body">
+            <p>新手最容易困惑的點：<strong>「為什麼數字越小，光圈反而越大？」</strong></p>
+            <div style="background: rgba(184,87,54,0.06); padding: 8px 12px; border-radius: 6px; font-family: var(--font-hand); color: var(--color-terracotta); margin: 8px 0;">
+              f-stop = 鏡頭焦距 / 光圈有效孔徑直徑
+            </div>
+            <ul>
+              <li>因為孔徑直徑在分母！直徑越大，算出來的數值越小。</li>
+              <li><strong>標準全檔光圈級距 (進光量每次翻倍 / 減半)</strong>：
+                <div style="background: #fff; border: 1px solid var(--border-soft); padding: 6px; border-radius: 4px; margin-top: 6px; text-align: center; font-weight: 700; font-family: var(--font-hand);">
+                  f/1.4 → f/2.0 → f/2.8 → f/4.0 → f/5.6 → f/8.0 → f/11 → f/16
+                </div>
+              </li>
+              <li><code>f/1.4</code> 的進光量是 <code>f/2.8</code> 的 <strong>4 倍</strong>，更是 <code>f/16</code> 的 <strong>128 倍</strong>！</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="journal-card card-accent-sage">
+            <div class="journal-card-title">📸 實戰場景與推薦光圈手帳</div>
+            <table class="table-notebook">
+              <thead>
+                <tr>
+                  <th>推薦光圈值</th>
+                  <th>視覺效果</th>
+                  <th>典型拍攝題材</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>f/1.4 - f/2.8</strong></td>
+                  <td>極淺景深、背景奶油散景</td>
+                  <td>人像寫真、咖啡廳美食、微光</td>
+                </tr>
+                <tr>
+                  <td><strong>f/4.0 - f/5.6</strong></td>
+                  <td>主體清晰、交代環境細節</td>
+                  <td>日常街拍、生活紀錄</td>
+                </tr>
+                <tr>
+                  <td><strong>f/8.0 - f/11</strong></td>
+                  <td><strong>鏡頭畫質甜區</strong>、全景清晰</td>
+                  <td>壯麗風景、合照、建築攝影</td>
+                </tr>
+                <tr>
+                  <td><strong>f/16 以上</strong></td>
+                  <td>光學繞射畫質變軟、星芒</td>
+                  <td>夜景星芒長曝（避開常態使用）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Shutter Speed -->
+    <div class="slide" id="slide-6">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 05 · 快門控制</span>
+          <h2 class="slide-title">快門速度 (Shutter Speed)：時間的定格與流動</h2>
+          <p class="slide-subtitle">嚴格區分「主體運動模糊」與「相機手震」的診斷方法</p>
+        </div>
+        <div class="slide-date-stamp">SPEED<br>PAGE 06</div>
+      </div>
+      <div class="grid-3">
+        <div class="journal-card card-accent-indigo">
+          <div class="journal-card-title">⚡ 凍結極速瞬間</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>1/1000s ~ 1/4000s+</strong>：飛鳥展翅、運動員騰空、飛濺水花。</li>
+              <li><strong>1/250s ~ 1/500s</strong>：奔跑的小朋友與毛孩、街頭行人。</li>
+              <li><strong>操作心法</strong>：主體動得越快，快門就要拉得越極限！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">🌊 慢速長曝的詩意</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>1/2s ~ 2s</strong>：瀑布流水呈現絲絹霧化質感。</li>
+              <li><strong>10s ~ 30s</strong>：城市夜景車軌、抹平海浪波濤。</li>
+              <li><strong>B快門 (Bulb)</strong>：手動控制開合，用於星軌、煙火光繪。</li>
+              <li><strong>核心禁忌</strong>：長曝<strong>必須架設三腳架</strong>！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">🛡️ 倒數安全快門法則</div>
+          <div class="journal-card-body">
+            <p>手持相機時防止手震的最低極限：</p>
+            <div style="background: rgba(184,87,54,0.06); padding: 6px; border-radius: 4px; font-family: var(--font-hand); color: var(--color-terracotta); margin: 6px 0;">
+              安全快門 ≤ 1 / 等效焦距 秒
+            </div>
+            <ul>
+              <li>用 200mm 長焦手持，快門至少需 <strong>1/200s</strong>！</li>
+              <li><strong>避坑提醒</strong>：防手震 (IBIS) 只能防攝影師手抖，<strong>主體自己在動依然會模糊</strong>！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: ISO -->
+    <div class="slide" id="slide-7">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 06 · 感光度</span>
+          <h2 class="slide-title">感光度 (ISO)：弱光守門員與雜訊平衡</h2>
+          <p class="slide-subtitle">「寧要雜訊，不要晃動」—— 破除新手對高 ISO 的過度恐懼</p>
+        </div>
+        <div class="slide-date-stamp">SENSOR<br>PAGE 07</div>
+      </div>
+      <div class="grid-2">
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">💡 數位 ISO 本質：訊號放大器</div>
+          <div class="journal-card-body">
+            <ul>
+              <li>感光元件的物理受光能力是固定的，調高 ISO 相當於把<strong>音響的音量旋鈕轉大</strong>。</li>
+              <li>把微弱光線訊號放大的同時，底層電路雜音也一併被放大，產生彩色噪點與顆粒感。</li>
+              <li><strong>原生基準感光度 (Base ISO 100)</strong>：擁有最純淨的畫質與最寬廣的<strong>動態範圍 (Dynamic Range)</strong>。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">🏆 新手黃金心法：「寧要雜訊，不要晃動」</div>
+          <div class="journal-card-body">
+            <div style="background: rgba(184,87,54,0.08); border-left: 3px solid var(--color-terracotta); padding: 10px; border-radius: 4px; margin-bottom: 12px;">
+              <strong>手帳警語：</strong>
+              <p style="font-size: 0.86rem; color: #5c4e46; margin-top: 4px;">很多新手死活不肯把 ISO 調過 400，導致室內快門跌破 1/15s，整張照片拍出來全是相機晃動的廢片！</p>
+            </div>
+            <ul>
+              <li><strong>晃動模糊是絕症</strong>：手震廢片後製無法挽救。</li>
+              <li><strong>雜訊是可以被修復的</strong>：現代數位降噪軟體極強大，縮圖分享時雜訊微乎其微。</li>
+              <li><strong>善用 Auto ISO</strong>：設定最低快門限制（如 1/125s）與 ISO 上限（如 6400）。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Camera Modes & Physical Dial -->
+    <div class="slide" id="slide-8">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 07 · 操作實戰</span>
+          <h2 class="slide-title">模式轉盤解密：該轉去哪一檔？</h2>
+          <p class="slide-subtitle">PASMB 模式核心邏輯與初學者的黃金起手式</p>
+        </div>
+        <div class="slide-date-stamp">DIAL<br>PAGE 08</div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="journal-card card-accent-indigo" style="margin-bottom: 14px;">
+            <div class="journal-card-title">🎛️ 四大模式權限劃分</div>
+            <table class="table-notebook">
+              <thead>
+                <tr>
+                  <th>模式</th>
+                  <th>你手動決定</th>
+                  <th>相機自動計算</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>P (程式自動)</strong></td>
+                  <td>ISO、曝光補償</td>
+                  <td>光圈、快門</td>
+                </tr>
+                <tr>
+                  <td><strong>Av / A (光圈先決)</strong></td>
+                  <td><span style="color:var(--color-terracotta); font-weight:700;">光圈大小</span>、ISO</td>
+                  <td><strong>快門速度</strong> (最推薦日常首選)</td>
+                </tr>
+                <tr>
+                  <td><strong>Tv / S (快門先決)</strong></td>
+                  <td><span style="color:var(--color-indigo); font-weight:700;">快門速度</span>、ISO</td>
+                  <td><strong>光圈大小</strong> (運動動態首選)</td>
+                </tr>
+                <tr>
+                  <td><strong>M (全手動)</strong></td>
+                  <td>光圈、快門、ISO 全自己來</td>
+                  <td>無 (完全手控)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="background: rgba(83,107,86,0.08); padding: 10px 14px; border-radius: 6px; font-size: 0.88rem; color: var(--color-sage); border: 1px solid rgba(83,107,86,0.2);">
+            🌱 <strong>新手成長起手式</strong>：80% 的日常拍攝鎖定「光圈先決 (Av/A)」，專注於景深虛化，曝光時間交給相機算！
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div class="polaroid-box" style="transform: rotate(1.5deg); width: 340px;">
+            <div class="tape-corner tape-tr"></div>
+            <img src="assets/canon-rangefinder.jpg" alt="Canonet QL17 Rangefinder" class="polaroid-img" style="height: 290px;">
+            <div class="polaroid-caption">「轉動實體光圈環，找回純粹的專注」</div>
+            <div class="polaroid-params">CANONET QL17 · 40MM F/1.7</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Focal Length & Perspective -->
+    <div class="slide" id="slide-9">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 08 · 鏡頭光學</span>
+          <h2 class="slide-title">鏡頭焦段與空間透視：從超廣角到長焦</h2>
+          <p class="slide-subtitle">透視只由「距離」決定！廣角張力 vs 長焦空間壓縮感</p>
+        </div>
+        <div class="slide-date-stamp">LENS<br>PAGE 09</div>
+      </div>
+      <div class="grid-3">
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">🌐 廣角端 (14mm ~ 35mm)</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>超廣角 (&lt;24mm)</strong>：強烈近大遠小張力，天空與大景向外擴張。</li>
+              <li><strong>人文焦段 (35mm)</strong>：交代人與環境脈絡的小廣角，街拍紀實黃金視角。</li>
+              <li><strong>避坑</strong>：人像臉部切勿放畫面最四角，會被光學拉伸變形。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">👁️ 標準焦段 (50mm)</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>最接近人眼單眼自然注意力（約 47°）</strong>。</li>
+              <li>無誇張形變、透視真實無欺騙感。</li>
+              <li>新手練習走位構圖、觀察光影的「最佳導師鏡頭」。</li>
+              <li>生活隨拍、日常美食、人像半身。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-indigo">
+          <div class="journal-card-title">🔭 長焦望遠 (85mm ~ 200mm+)</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>85mm 人像鏡皇</strong>：面部五官比例最適中，背景虛化立體割裂。</li>
+              <li><strong>空間壓縮感</strong>：將數百公尺外的遠山或夕陽「拉近放大」貼在主體身後。</li>
+              <li>簡化雜亂背景為純淨色塊。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Natural Light -->
+    <div class="slide" id="slide-10">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 09 · 光影美學</span>
+          <h2 class="slide-title">觀察自然光：光質判讀與魔幻時刻</h2>
+          <p class="slide-subtitle">硬光、軟光、光的方向性與大自然最美麗的黃金一小時</p>
+        </div>
+        <div class="slide-date-stamp">LIGHT<br>PAGE 10</div>
+      </div>
+      <div class="grid-2">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="journal-card card-accent-ochre">
+            <div class="journal-card-title">☀️ 硬光 vs 軟光 (Light Quality)</div>
+            <div class="journal-card-body">
+              <ul>
+                <li><strong>硬光 (晴天直射艷陽)</strong>：發光面積小，陰影銳利剛硬、黑白反差極大。拍人像易產生難看的黑眼圈。</li>
+                <li><strong>軟光 (陰天雲層漫射)</strong>：雲層是大自然的天然超大柔光罩！陰影過渡溫柔細膩，最適合拍人像皮膚與美食。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="journal-card card-accent-indigo">
+            <div class="journal-card-title">🌄 魔幻時刻 (Magic Hour)</div>
+            <div class="journal-card-body">
+              <ul>
+                <li><strong>黃金時刻 (Golden Hour，日落前30分)</strong>：斜射陽光溫暖金黃，拍人像逆光髮絲光絕美。</li>
+                <li><strong>藍色時刻 (Blue Hour，日落後20分)</strong>：天空呈現深邃純淨冷藍，與街道亮起的暖黃街燈形成奢華冷暖對比！</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div class="polaroid-box" style="transform: rotate(-1deg); width: 360px;">
+            <div class="tape-corner tape-tl"></div>
+            <img src="assets/station-sea.jpg" alt="Seaside Station (Arimagawa)" class="polaroid-img" style="height: 290px;">
+            <div class="polaroid-caption">「有間川海邊月台 · 午後的靜謐側光與水平引導」</div>
+            <div class="polaroid-params">50MM · F/5.6 · 1/320S · ISO 100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Composition -->
+    <div class="slide" id="slide-11">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 10 · 視覺文法</span>
+          <h2 class="slide-title">構圖原則：三分法、引導線與前景框架</h2>
+          <p class="slide-subtitle">如何透過視覺引導，讓觀者的視線一眼落入故事的核心？</p>
+        </div>
+        <div class="slide-date-stamp">FRAMING<br>PAGE 11</div>
+      </div>
+      <div class="grid-2">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="journal-card card-accent-terra">
+            <div class="journal-card-title">🌸 前景框架構圖法 (Framing)</div>
+            <div class="journal-card-body">
+              <p>不要直接對準主體單調平拍！尋找身邊的元素作為「前景框架」：</p>
+              <ul>
+                <li>利用春天的<strong>櫻花垂枝</strong>、古建築的<strong>窗櫺</strong>、或是微暗的<strong>門廊</strong>。</li>
+                <li><strong>效果</strong>：營造出「窺視感」與強烈的縱深維度，將平凡的主體包裹進如畫的詩意中。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="journal-card card-accent-sage">
+            <div class="journal-card-title">📐 三分法則 (Rule of Thirds)</div>
+            <div class="journal-card-body">
+              <ul>
+                <li>將水平線安放在上 1/3（凸顯水面波光）或下 1/3（凸顯壯麗雲彩）。</li>
+                <li>將視覺重心（如山峰、人物雙眼、小舟）安放在井字交會點上。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div class="polaroid-box" style="transform: rotate(2deg); width: 360px;">
+            <div class="tape-corner tape-tr"></div>
+            <img src="assets/fuji-sakura.jpg" alt="Mount Fuji and Cherry Blossoms" class="polaroid-img" style="height: 290px;">
+            <div class="polaroid-caption">「春之富士 · 櫻花垂枝框景與水平小舟」</div>
+            <div class="polaroid-params">70MM · F/8.0 · 1/400S · ISO 100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: Prime vs Zoom -->
+    <div class="slide" id="slide-12">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 11 · 選鏡決策</span>
+          <h2 class="slide-title">定焦鏡 vs 變焦鏡：新手第一顆鏡頭怎麼挑？</h2>
+          <p class="slide-subtitle">定焦鏡練習走位與攝影眼；變焦鏡提供不可替代的構圖靈活性</p>
+        </div>
+        <div class="slide-date-stamp">CHOICE<br>PAGE 12</div>
+      </div>
+      <div class="grid-2">
+        <div class="journal-card card-accent-ochre">
+          <div class="journal-card-title">⚖️ 核心特質對決</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>定焦鏡頭 (Prime Lens)</strong>：
+                <ul>
+                  <li><strong>散景之王</strong>：f/1.4 ~ f/1.8 超大光圈，暗處也能拍。</li>
+                  <li><strong>極致輕巧</strong>：如同一顆蘋果重量，讓人願意天天隨身攜帶。</li>
+                  <li><strong>強迫走位</strong>：用身體前後移動尋找角度，極度磨練透視感。</li>
+                </ul>
+              </li>
+              <li><strong>變焦鏡頭 (Zoom Lens)</strong>：
+                <ul>
+                  <li><strong>構圖靈活性</strong>：原地縮放，不可走動場合（看台、活動抓拍）必備。</li>
+                  <li>代價：大光圈變焦鏡粗重昂貴，浮動光圈在望遠端易手震。</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">🌲 4 步選鏡決策樹</div>
+          <div class="journal-card-body">
+            <ol style="line-height: 1.8;">
+              <li><strong>主拍人像寫真、日常美食咖啡廳、追求奶油背景虛化？</strong><br>
+                👉 果斷入手一顆 <strong>35mm f/1.8</strong> 或 <strong>50mm f/1.8</strong> 定焦鏡！
+              </li>
+              <li><strong>主拍旅遊風景、家庭聚會、無法隨意走位？</strong><br>
+                👉 選擇標準變焦鏡（如 24-70mm 或 18-50mm）。
+              </li>
+              <li><strong>完全不知道自己喜歡拍什麼？</strong><br>
+                👉 <strong>先用原廠隨機的 Kit 變焦鏡拍 3 個月</strong>！隨後分析 EXIF 最常停留在哪個焦段，再直奔該焦段的定焦鏡。
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 13: Digital Darkroom 10-Step -->
+    <div class="slide" id="slide-13">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 12 · 數位暗房</span>
+          <h2 class="slide-title">從 RAW 到成片：經典十步後製工序</h2>
+          <p class="slide-subtitle">Cambridge in Colour 規範的科學工序，防止噪點激發與色階斷裂</p>
+        </div>
+        <div class="slide-date-stamp">DARKROOM<br>PAGE 13</div>
+      </div>
+      <div class="grid-3">
+        <div class="journal-card card-accent-indigo">
+          <div class="journal-card-title">1~4 步：全域物理校準</div>
+          <div class="journal-card-body">
+            <ol style="line-height: 1.7;">
+              <li><strong>白平衡校正</strong>：色溫 K 數與 Tint 滴管精準還原。</li>
+              <li><strong>曝光補償與高光陰影</strong>：壓暗過曝高光，拉回暗部細節。</li>
+              <li><strong>數位降噪</strong>：在銳化前先抹除高 ISO 彩色雜訊。</li>
+              <li><strong>鏡頭校正</strong>：一鍵消除紫邊、暗角與幾何變形。</li>
+            </ol>
+          </div>
+        </div>
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">5~8 步：反差與藝術修飾</div>
+          <div class="journal-card-body">
+            <ol start="5" style="line-height: 1.7;">
+              <li><strong>擷取銳化</strong>：補償鏡頭微軟化，設定邊緣遮罩。</li>
+              <li><strong>對比曲線 (Curves)</strong>：S 型曲線打造 3D Pop 通透感。</li>
+              <li><strong>旋轉與裁切</strong>：拉平海平面，二次構圖。</li>
+              <li><strong>色彩微調</strong>：使用自然飽和度保護膚色，消除感光元件入塵髒點。</li>
+            </ol>
+          </div>
+        </div>
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">9~10 步：終端輸出準備</div>
+          <div class="journal-card-body">
+            <ol start="9" style="line-height: 1.7;">
+              <li><strong>尺寸重採樣縮放</strong>：為社群或相紙大圖列印優化插值。</li>
+              <li><strong>輸出銳化 (Output Sharpening)</strong>：針對螢幕或相紙纖維特性施加最後銳化。</li>
+            </ol>
+            <div style="background: rgba(83,107,86,0.08); padding: 8px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px; color: var(--color-sage);">
+              💡 永遠拍攝 14-bit RAW 格式，掌握完整生鮮數位底片！
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 14: Debunking Myths -->
+    <div class="slide" id="slide-14">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 13 · 迷思粉碎機</span>
+          <h2 class="slide-title">破除攝影界三大常見新手迷思</h2>
+          <p class="slide-subtitle">建立健康通透的攝影心態，拒絕被偽概念綁架</p>
+        </div>
+        <div class="slide-date-stamp">MYTHS<br>PAGE 14</div>
+      </div>
+      <div class="grid-3">
+        <div class="journal-card card-accent-terra">
+          <div class="journal-card-title">❌ 迷思一：高像素等於高畫質？</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>「聞相 (Pixel Peeping)」陷阱</strong>：放大 100% 數睫毛無意義。</li>
+              <li>高像素在同片幅下單像素受光面積變小，夜間高感雜訊更明顯，對微震極度敏感。</li>
+              <li>社群分享只需 200~400 萬像素，A4 輸出也只需 1200 萬像素！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-ochre">
+          <div class="journal-card-title">❌ 迷思二：後製修圖就是造假？</div>
+          <div class="journal-card-body">
+            <ul>
+              <li>大師安瑟亞當斯名言：<strong>「底片是樂譜，暗房沖印是演奏。」</strong></li>
+              <li>RAW 檔是一堆電壓數據，本來就需要數位暗房解碼。</li>
+              <li>「相機直出」只是相機工程師隨機替你預設了後製，親自後製才是找回創作主導權！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">❌ 迷思三：長焦景深一定比較淺？</div>
+          <div class="journal-card-body">
+            <ul>
+              <li><strong>光學物理真理</strong>：在光圈相同、主體在畫面中大小維持一致（恆定放大率）時，<strong>總景深幾乎完全不受焦距影響！</strong></li>
+              <li>長焦看似虛化更強，是因為長焦視角極窄，將遠處的一點點背景<strong>「空間壓縮放大」</strong>了幾倍！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 15: Field Checklist & Conclusion -->
+    <div class="slide" id="slide-15">
+      <div class="washi-tape-top"></div>
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag">CHAPTER 14 · 旅人出發</span>
+          <h2 class="slide-title">結語：新手出門實戰 6 點檢查手帳</h2>
+          <p class="slide-subtitle">拿起相機，走入街道，去捕捉屬於你的光影動人瞬間</p>
+        </div>
+        <div class="slide-date-stamp">CHECKLIST<br>PAGE 15</div>
+      </div>
+      <div class="grid-2">
+        <div class="journal-card card-accent-sage">
+          <div class="journal-card-title">📋 出門拍攝前 60 秒極速檢核</div>
+          <div class="journal-card-body">
+            <ul style="line-height: 1.85;">
+              <li>[ ] <strong>電池是否充滿</strong>？（是否有帶備用電池）</li>
+              <li>[ ] <strong>記憶卡是否已插入相機</strong>？（確認剩餘張數非零）</li>
+              <li>[ ] <strong>檔案格式確認為 RAW 或 RAW+JPEG</strong>？</li>
+              <li>[ ] <strong>ISO 是否歸位</strong>？（確認不是昨晚隨手鎖死在 ISO 6400）</li>
+              <li>[ ] <strong>相機模式設在 Av / A (光圈先決)</strong>？</li>
+              <li>[ ] <strong>鏡頭前組鏡片是否擦拭乾淨、遮光罩是否裝上</strong>？</li>
+            </ul>
+          </div>
+        </div>
+        <div class="journal-card card-accent-terra" style="display: flex; flex-direction: column; justify-content: center;">
+          <blockquote style="font-family: var(--font-serif); font-size: 1.25rem; font-style: italic; color: var(--color-terracotta); line-height: 1.6; border-left: 3px solid var(--color-terracotta); padding-left: 16px; margin: 12px 0;">
+            「你的前 10,000 張照片，是你最差的照片。」<br>
+            <span style="font-size: 0.9rem; color: var(--text-muted); font-style: normal; font-family: var(--font-sans);">— 亨利·卡蒂爾-布列松 (Henri Cartier-Bresson)</span>
+          </blockquote>
+          <p style="margin-top: 14px; font-size: 0.94rem; line-height: 1.7; color: var(--text-main);">
+            不要害怕拍出廢片，每一張手震或曝光失誤的照片，都在為你的直覺累積養分。<br>
+            <strong>享受在旅途中按下快門的感動，祝你拍攝愉快！</strong>
+          </p>
+          <div class="stamp-seal" style="right: 20px; bottom: 20px;">
+            PASSED<br>FIELD<br>READY
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Floating Controls -->
+  <div class="controls">
+    <button class="btn" id="prevBtn" title="上一頁 (Left Arrow / PageUp)">◀ 上一頁</button>
+    <div class="counter" id="slideCounter">PAGE 01 / 15</div>
+    <button class="btn" id="nextBtn" title="下一頁 (Right Arrow / Space)">下一頁 ▶</button>
+    <div style="width: 1px; height: 16px; background: var(--border-soft);"></div>
+    <button class="btn" id="toggleDrawerBtn" title="章節目錄 (M / Esc)">☰ 目錄</button>
+    <button class="btn" id="fullscreenBtn" title="全螢幕切換 (F)">⛶ 全螢幕</button>
+  </div>
+
+  <!-- Navigation Drawer -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">旅行手帳章節目錄</div>
+      <button class="btn" id="closeDrawerBtn" style="padding: 4px 8px;">✕</button>
+    </div>
+    <div class="drawer-list" id="drawerList"></div>
+  </div>
+
+  <!-- Shortcuts hint -->
+  <div class="shortcuts-hint">
+    <span><span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">Space</span> 翻頁</span>
+    <span><span class="kbd">F</span> 全螢幕</span>
+    <span><span class="kbd">M</span> 目錄</span>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const drawer = document.getElementById('drawer');
+    const toggleDrawerBtn = document.getElementById('toggleDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const drawerList = document.getElementById('drawerList');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Slide Titles for Drawer
+    const slideMeta = [
+      "01. 封面：攝影初學者入門手帳",
+      "02. 前言：日常的非日常（減法藝術）",
+      "03. 相機心臟：感光元件與 35mm 片幅",
+      "04. 曝光黃金三角與雨桶比喻",
+      "05. 光圈：掌控進光量與迷人散景",
+      "06. 快門速度：時間的定格與流動",
+      "07. 感光度 (ISO)：弱光守門員",
+      "08. 模式轉盤解密：該轉去哪一檔",
+      "09. 鏡頭焦段與空間透視維度",
+      "10. 觀察自然光：光質與魔幻時刻",
+      "11. 構圖原則：櫻花富士山框景法",
+      "12. 鏡頭抉擇：定焦鏡 vs 變焦鏡",
+      "13. 數位暗房：經典十步後製工序",
+      "14. 迷思粉碎機：破除三大新手偏見",
+      "15. 結語：新手出門 6 點實戰手帳"
+    ];
+
+    // Populate drawer list
+    slideMeta.forEach((title, idx) => {
+      const item = document.createElement('div');
+      item.className = 'drawer-item' + (idx === 0 ? ' active' : '');
+      item.innerHTML = `<span class="drawer-num">${String(idx + 1).padStart(2, '0')}</span><span>${title}</span>`;
+      item.addEventListener('click', () => {
+        goToSlide(idx);
+        toggleDrawer(false);
+      });
+      drawerList.appendChild(item);
+    });
+
+    function updateSlide() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Update counter
+      counter.textContent = `PAGE ${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+
+      // Update progress bar
+      const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Update drawer active item
+      Array.from(drawerList.children).forEach((item, idx) => {
+        item.classList.toggle('active', idx === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlide();
+      }
+    }
+
+    function toggleDrawer(force) {
+      if (typeof force === 'boolean') {
+        drawer.classList.toggle('open', force);
+      } else {
+        drawer.classList.toggle('open');
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Event Listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    toggleDrawerBtn.addEventListener('click', () => toggleDrawer());
+    closeDrawerBtn.addEventListener('click', () => toggleDrawer(false));
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key === 'm' || e.key === 'M' || e.key === 'Escape') {
+        e.preventDefault();
+        toggleDrawer();
+      }
+    });
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    window.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 50) {
+        prevSlide();
+      }
+    }, false);
+
+    // Init
+    updateSlide();
+  </script>
+</body>
+</html>
